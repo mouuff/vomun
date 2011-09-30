@@ -17,7 +17,10 @@ class Connection(tunnels.base.Connection):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.connect((node.ip, node.port))
         
-        self.sock.send('{"type":"connect_request"}')
+        self.send('{"type":"connect_request"}')
+        #self.sock.send('Can I connect?\n')
+    def send(self, Message):
+        self.sock.send(Message)
     
 class Listener(libs.threadmanager.Thread):
     '''Listen for UDP connections on our port'''
@@ -48,5 +51,3 @@ def start():
     listener.start()
     libs.threadmanager.register(listener)
     
-    for friend in libs.friends.friends:
-        connections[friend] = Connection(libs.friends.friends[friend])

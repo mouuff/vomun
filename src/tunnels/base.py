@@ -1,3 +1,4 @@
+
 class Tunnel(object):
     '''Base Tunnel class. Should be subclassed by other tunnels for
     compatibility reasons as well as ease of use.
@@ -21,3 +22,8 @@ class Message(object):
         self.src_port = from_port
         self.msg = message
         
+class ConnectionError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)

@@ -9,6 +9,12 @@ print('''
 ''' % (VERSION, BUILD))
 
 import time
+from code import InteractiveConsole
+import rlcompleter
+import readline
+readline.parse_and_bind("tab: complete")
+
+
 
 import libs.threadmanager
 import libs.events
@@ -20,9 +26,21 @@ friends.load_friends()
 import tunnels.directudp
 tunnels.directudp.start()
 
-try:
-    while True:
-        time.sleep(1)
-except:
-    libs.threadmanager.killall()
-    print friends.save_friends()
+#for friend in friends.friends.values():
+#    friend.sendMessage("SUP")
+
+
+running = True
+
+console = InteractiveConsole(locals())
+
+while running:
+    try:
+        console.push(raw_input(">>>"))
+    except KeyboardInterrupt:
+        running = False
+libs.threadmanager.killall()
+friends.save_friends()
+
+exit()
+
