@@ -1,7 +1,12 @@
 '''This module loads a list of friends out of ~/.vomun/friends.json'''
 import json
 import os.path
+
+
 from libs.logs import logger as log
+import tunnels.directudp as directudp
+from tunnels.base import ConnectionError
+
 
 friends = {}
 friendlistpath = os.path.expanduser("~/.vomun/friends.json")
@@ -53,6 +58,21 @@ class Friend:
         self.port = port
         self.name = name
         self.keyid = keyid
+        self.connected = False
+        self.connection = None
+
+
+    def connect(self):
+        self.connection = directudp.Connection(self)
+        self.connected = True
+
+    def sendMessage(self, Message):
+        if not self.connected:
+            self.connect()
+            if not self.connected:
+                raise ConnectionError("Could not reach %s" % self.ip)
+            
+        self.connection.send(Message)
 
     def _json(self):
         return """
@@ -62,6 +82,7 @@ class Friend:
         "lastip": "%s",
         "port": %i    
     }""" % (self.name,self.keyid,self.ip,self.port)
+
     def __str__(self):
         return "<friend %s on %s:%i with id %s>" % (
                 self.name, self.ip, self.port, self.keyid)
