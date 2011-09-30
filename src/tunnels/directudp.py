@@ -17,7 +17,7 @@ class Connection(tunnels.base.Connection):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.connect((node.ip, node.port))
         
-        self.sock.send('Can I connect?\n')
+        self.sock.send('{"type":"connect_request"}')
     
 class Listener(libs.threadmanager.Thread):
     '''Listen for UDP connections on our port'''
