@@ -1,4 +1,8 @@
 import gnupg
+try:
+    gpg = gnupg.GPG(gnupghome = '') # TODO: read path from config
+except ValueError:
+    print('[*] ERROR: GPG does not appear to be installed.')
 
 def generate_key(keylength = 2048):
     '''Generate a key and return the key ID'''
