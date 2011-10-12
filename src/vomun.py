@@ -1,24 +1,30 @@
 #! /usr/bin/env python
-VERSION = 'v0.0.0b0pre'
-BUILD = 0
-print('''
+import sys
+from libs.globals import globalVars
+globalVars["running"] = True
+globalVars["anon+"] = {}
+globalVars["anon+"]["VERSION"] = 'v0.0.0b0pre'
+globalVars["anon+"]["BUILD"] = 0
+globalVars["input"] = sys.stdin
+globalVars["anon+"]["Banner"] = '''
 ======================
 = Anon+ %s
 = Build: %s
 ======================
-''' % (VERSION, BUILD))
+''' % ( globalVars["anon+"]["VERSION"], 
+        globalVars["anon+"]["BUILD"])
 
-import time
-from code import InteractiveConsole
-import rlcompleter
-import readline
-readline.parse_and_bind("tab: complete")
-
+print globalVars["anon+"]["Banner"]
 
 
 import libs.threadmanager
 import libs.events
 import libs.logs as logs
+
+#startup
+from libs.console import console
+consoleO = console()
+consoleO.start()
 
 import libs.friends as friends
 friends.load_friends()
@@ -26,19 +32,14 @@ friends.load_friends()
 import tunnels.directudp
 tunnels.directudp.start()
 
-#for friend in friends.friends.values():
-#    friend.sendMessage("SUP")
+#main
+from uis.web import WebUI
+web = WebUI()
+web.start()
 
+while globalVars["running"]: pass
 
-running = True
-
-console = InteractiveConsole(locals())
-
-while running:
-    try:
-        console.push(raw_input(">>>"))
-    except KeyboardInterrupt:
-        running = False
+# cleanup
 libs.threadmanager.killall()
 friends.save_friends()
 

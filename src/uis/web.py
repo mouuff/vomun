@@ -3,7 +3,7 @@
 import string,cgi,time
 from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-
+import libs.threadmanager
 
 class MyHandler(BaseHTTPRequestHandler):
 
@@ -61,6 +61,11 @@ def main():
     except KeyboardInterrupt:
         print('^C received, shutting down server')
         server.socket.close()
+
+
+class WebUI(libs.threadmanager.Thread):
+    def run(self):
+        main()
 
 if __name__ == '__main__':
     main()

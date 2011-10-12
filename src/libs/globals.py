@@ -1,0 +1,2 @@
+'''global storage'''
+globalVars = {}

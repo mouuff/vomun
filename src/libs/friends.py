@@ -54,6 +54,7 @@ def del_friend(keyid):
         
 class Friend:
     def __init__(self, ip, port=1337, name = "unknown", keyid= "00000000000"):
+        '''Defines a friend, can be used to send a message'''
         self.ip = ip
         self.port = port
         self.name = name
@@ -61,12 +62,17 @@ class Friend:
         self.connected = False
         self.connection = None
 
+    def rename(self,newname):
+        '''Rename the Friend'''
+        self.name = name
 
     def connect(self):
+        '''Connect to the friend'''
         self.connection = directudp.Connection(self)
         self.connected = True
 
     def sendMessage(self, Message):
+        '''Send a message to the friend. Will try to establish a connection, if not yet connected'''
         if not self.connected:
             self.connect()
             if not self.connected:
@@ -75,6 +81,7 @@ class Friend:
         self.connection.send(Message)
 
     def _json(self):
+        '''returns the json representation of a friend, used to save the friendlist'''
         return """
     {
         "name": "%s",
