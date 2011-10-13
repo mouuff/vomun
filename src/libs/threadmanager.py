@@ -3,13 +3,23 @@ needs to exist. Threads should stop when thread.stop() is called.
 '''
 import threading
 threads = []
-
+joinlist = []
 def register(thread):
     if isinstance(thread, Thread):
         threads.append(thread)
     else:
         raise Exception('Must be a subclass of libs.threadmanager.Thread')
     
+def registerForJoin(thread):
+    if isinstance(thread, Thread):
+        joinlist.append(thread)
+    else:
+        raise Exception('Must be a subclass of libs.threadmanager.Thread')
+
+def doJoins(timeout=None):
+    for thread in joinlist:
+        thread.join(timeout)
+
 def killall():
     for thread in threads:
         thread.stop()

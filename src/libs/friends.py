@@ -3,12 +3,12 @@ import json
 import os.path
 
 
-from libs.logs import logger as log
 import tunnels.directudp as directudp
 from tunnels.base import ConnectionError
+from libs.globals import globalVars
 
 
-friends = {}
+globalVars["friends"] = {}
 friendlistpath = os.path.expanduser("~/.vomun/friends.json")
 friendlistr = open(friendlistpath,"r")
 
@@ -25,7 +25,7 @@ def load_friends():
             friendo = Friend(ip, port, name, keyid)
 
             print friendo
-            friends[keyid] = friendo
+            globalVars["friends"][keyid] = friendo
 
         except Exception as ex: 
             print ex, friend
@@ -35,21 +35,21 @@ def save_friends():
     json = """[
 %s
 ]"""
-    friendsjson = ",".join([friend._json() for friend in friends.values()])
+    friendsjson = ",".join([friend._json() for friend in globalVars["friends"].values()])
 
     friendlistw.write(json % friendsjson)
 
 def add_friend(keyid, ip, port = 1337, name = "unknown"):
     '''Add a friend'''
     friendo = Friend(ip, port, name, keyid)
-    friends[keyid] = friendo
+    globalVars["friends"][keyid] = friendo
 
 def del_friend(keyid):
     '''Delete a friend'''
     try:
-        del friends[keyid]
+        del globalVars["friends"][keyid]
     except:
-        log.info("could not delete friend %s: Friend not found" % keyid)
+        globalVars["logger"].info("could not delete friend %s: Friend not found" % keyid)
 
         
 class Friend:

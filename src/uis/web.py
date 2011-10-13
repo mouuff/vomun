@@ -1,17 +1,20 @@
 #! /usr/bin/env python
 
 import string,cgi,time
-from os import curdir, sep
+from os import getcwd, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import libs.threadmanager
+from libs.globals import globalVars
 
 class MyHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
+            if self.path == "/":
+                self.path = "/index.py"
             # html file lets display it
             if self.path.endswith('.html'):
-                f = open(curdir + sep + self.path,"r") 
+                f = open(getcwd() + sep + self.path,"r") 
                 self.send_response(200)
                 self.send_header('Content-type',	'text/html')
                 self.end_headers()
@@ -20,14 +23,20 @@ class MyHandler(BaseHTTPRequestHandler):
                 return
             #if its a css file lets display it
             if self.path.endswith('.css'):
-                f = open(curdir + sep + self.path,"r") 
+                f = open(getcwd() + sep + self.path,"r") 
                 self.send_response(200)
                 self.send_header('Content-type',	'text/css')
                 self.end_headers()
                 self.wfile.write(f.read())
                 f.close()
                 return
-
+            if self.path.endswith('.py'):
+                filename = getcwd() + sep + "webui" + self.path
+                f = open(filename, "r")
+                src = f.read()
+                CompiledSrc = compile(src,filename,"exec")
+                eval (CompiledSrc,globalVars,{"request":self})
+                #print dir(CompiledSrc)
       
                 
             return
@@ -55,17 +64,24 @@ class MyHandler(BaseHTTPRequestHandler):
 
 def main():
     try:
-        server = HTTPServer(('', 7777), MyHandler)
+        globalVars["server"] = HTTPServer(('', 7777), MyHandler)
         print('Webserver running on port 7777 : Started')
-        server.serve_forever()
+        while globalVars["running"] == True:
+            globalVars["server"].handle_request()
+            print "asd"
     except KeyboardInterrupt:
         print('^C received, shutting down server')
-        server.socket.close()
+        globalVars["server"].socket.close()
 
 
 class WebUI(libs.threadmanager.Thread):
+    def __init__(self):
+        libs.threadmanager.Thread.__init__(self)
+        globalVars["server"] = HTTPServer(('', 7777), MyHandler)
+        
     def run(self):
-        main()
+        while globalVars["running"] == True and not self._stop.isSet():
+            globalVars["server"].handle_request()
 
 if __name__ == '__main__':
     main()
