@@ -36,9 +36,9 @@ import tunnels.directudp
 tunnels.directudp.start()
 
 #main
-from uis.web import WebUI
-web = WebUI()
-libs.threadmanager.register(web)
+#from uis.web import WebUI
+#web = WebUI()
+#libs.threadmanager.register(web)
 #web.start()
 
 while globalVars["running"]:
