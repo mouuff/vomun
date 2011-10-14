@@ -6,12 +6,11 @@ import os.path
 import tunnels.directudp as directudp
 from tunnels.base import ConnectionError
 from libs.globals import globalVars
-
+from packets import parse_packets,packets_by_id,make_packet
 
 globalVars["friends"] = {}
 friendlistpath = os.path.expanduser("~/.vomun/friends.json")
 friendlistr = open(friendlistpath,"r")
-
 
 def load_friends():
     '''Load the List of friends'''
@@ -20,9 +19,9 @@ def load_friends():
         try:
             port = friend["port"]
             keyid = friend["keyid"]
-            name = friend["keyid"]
+            name = friend["name"]
             ip = friend["lastip"]
-            friendo = Friend(ip, port, name, keyid)
+            friendo = Friend(keyid, ip, port, name)
 
             print friendo
             globalVars["friends"][keyid] = friendo
@@ -39,9 +38,9 @@ def save_friends():
 
     friendlistw.write(json % friendsjson)
 
-def add_friend(keyid, ip, port = 1337, name = "unknown"):
+def add_friend(keyid,ip, port = 1337, name = "unknown"):
     '''Add a friend'''
-    friendo = Friend(ip, port, name, keyid)
+    friendo = Friend(keyid, ip, port, name)
     globalVars["friends"][keyid] = friendo
 
 def del_friend(keyid):
@@ -51,34 +50,72 @@ def del_friend(keyid):
     except:
         globalVars["logger"].info("could not delete friend %s: Friend not found" % keyid)
 
+def getFriendWithIP(ip):
+    for friend in globalVars["friends"].values():
+        if friend.ip == ip:
+            return friend
         
 class Friend:
-    def __init__(self, ip, port=1337, name = "unknown", keyid= "00000000000"):
+    def __init__(self, keyid, ip, port=1337, name = "unknown",):
         '''Defines a friend, can be used to send a message'''
         self.ip = ip
         self.port = port
         self.name = name
         self.keyid = keyid
         self.connected = False
-        self.connection = None
+        self.rconnection = None
+        self.wconnection = None
+        self.data = ""
 
-    def rename(self,newname):
+    def parse_packets(self):
+        print "parsing packets of %s" %self.name
+        packets,leftovers =  parse_packets(self.data)
+        self.data = leftovers
+        print "leftovers:", leftovers
+        for packet in packets:
+            self.handle_packets(packet[0],packet[1])
+
+    def handle_packets(self, packetId, packet):
+        if packetId in packets_by_id:
+            packetId = packets_by_id[packetId]
+
+        else:
+            reason = "Invalid packetId: %i" % packetId
+            disc = make_packet("Disconnect",reasonType="Custom",reason=reason,reasonlength=len(reason))
+            self.send(disc)
+            return
+        if packetId == "ConnectionRequest":
+            print "sending acceptConnection"
+            #self.connected = True
+            accept_connection = make_packet("AcceptConnection",int=1)
+            self.send(accept_connection,1)
+            print "acceptConnection sent"
+
+        elif packetId == "AcceptConnection":
+            print "got acceptConnection"
+            self.connected = True
+        else:
+            print packetId,packet
+
+    def rename(self, newname):
         '''Rename the Friend'''
         self.name = name
 
     def connect(self):
         '''Connect to the friend'''
-        self.connection = directudp.Connection(self)
-        self.connected = True
+        self.wconnection = directudp.Connection(self)
+        #self.connected = True
 
-    def sendMessage(self, Message):
+    def send(self, Message,system=0):
         '''Send a message to the friend. Will try to establish a connection, if not yet connected'''
-        if not self.connected:
+        if self.wconnection == None:
             self.connect()
-            if not self.connected:
-                raise ConnectionError("Could not reach %s" % self.ip)
-            
-        self.connection.send(Message)
+            #if not self.connected:
+            #    raise ConnectionError("Could not reach %s" % self.ip)
+        if not self.connected and not system:
+            print "not connected: Message discarded. Message was: %s" % Message
+            return
+        self.wconnection.send(Message)
 
     def _json(self):
         '''returns the json representation of a friend, used to save the friendlist'''

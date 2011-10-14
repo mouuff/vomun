@@ -15,9 +15,21 @@ class console(libs.threadmanager.Thread):
         libs.threadmanager.Thread.__init__(self)
         self.console = InteractiveConsole(globalVars)
 
+    initscript = [
+    "from libs.globals import globalVars",
+    'other = globalVars["friends"]["0"]',
+    "other.send('test')"
+    ]
+
     def run(self):
+
         while globalVars["running"] == True and not self._stop.isSet():
             try:
-                self.console.push(raw_input(">>>"))
+                line = raw_input(">>>")
+                if line == "runscript":
+                    for line in self.initscript:
+                        self.console.push(line)
+                else:
+                    self.console.push(line)
             except KeyboardInterrupt:
                 globalVars["running"] = False
