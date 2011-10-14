@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import string,cgi,time
-from os import curdir, sep
+#from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 
@@ -11,22 +11,23 @@ class MyHandler(BaseHTTPRequestHandler):
         try:
             # html file lets display it
             if self.path.endswith('.html'):
-                f = open(curdir + sep + self.path,"r") 
+                # TODO report connection with libs.events
+                #f = open(curdir + sep + self.path,"r") 
                 self.send_response(200)
                 self.send_header('Content-type',	'text/html')
                 self.end_headers()
-                self.wfile.write(f.read())
-                f.close()
+                self.wfile.write('200, OK. The server is working')
+                #f.close()
                 return
             #if its a css file lets display it
-            if self.path.endswith('.css'):
-                f = open(curdir + sep + self.path,"r") 
-                self.send_response(200)
-                self.send_header('Content-type',	'text/css')
-                self.end_headers()
-                self.wfile.write(f.read())
-                f.close()
-                return
+            #if self.path.endswith('.css'):
+            #    f = open(curdir + sep + self.path,"r") 
+            #    self.send_response(200)
+            #    self.send_header('Content-type',	'text/css')
+            #    self.end_headers()
+            #    self.wfile.write(f.read())
+            #    f.close()
+            #    return
 
       
                 
