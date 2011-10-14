@@ -8,12 +8,18 @@
 
 Unassigned:
  [I!] Get a freaking routing system worked out. Discuss in #anon+
- [B] Implement the routing system
  [B] Get chat working on top of our connections and routing
+     - Allow direct friend-to-friend (F2F) chat
+     - Provide SHA-1's for messages
+ [N] Expand the protocol for more robust messaging
+     - Include dual-layer encryption on packets
 
 aj00200:
  [IB] Work on basic connections
       Blocked by a working libs/friends.py file
+ [I!] Put in an identity management system
+ [I!] Work on the IRC UI
+ [IM!] Develop a routing system, some discussion needed
 
 vic20:
  [N!] Setup a git repo
