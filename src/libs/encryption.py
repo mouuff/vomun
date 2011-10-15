@@ -2,7 +2,7 @@ import gnupg
 import libs.globals
 
 try:
-    gpg = gnupg.GPG(gnupghome = libs.globals.global_vars['gnupgdir'])
+    gpg = gnupg.GPG(gnupghome = libs.globals.global_vars["config"]['gnupgdir'])
 except ValueError:
     print('[*] ERROR: GPG does not appear to be installed.')
 
