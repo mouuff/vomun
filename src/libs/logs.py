@@ -20,5 +20,5 @@ class Logger(libs.events.Handler):
         if OUTPUT:
             print('[*] %s' % message)
 
-libs.globals.global_vars['logger'] = Logger()
-libs.events.register_handler(libs.globals.global_vars['logger'])
+#libs.globals.global_vars['logger'] = Logger()
+libs.events.register_handler(Logger())

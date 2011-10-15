@@ -1,9 +1,10 @@
 '''global storage'''
 import os
 
-global_vars = { # TODO load some of this from ~/.vomun/config.cfg
-    'vomundir': os.getenv('HOME') + '/.vomun/',
-    'gnupgdir': os.getenv('HOME') + '/.vomun/gnupg/',
+
+import libs.config
+libs.config.load_config()
+global_vars = {
     'running': True,
     'anon+': {
         'VERSION': 'v0.0.0b0pre',
