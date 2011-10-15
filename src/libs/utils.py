@@ -1,7 +1,7 @@
-import sys
 import os
+import sys
 import signal
-from libs.globals import globalVars
+import libs.globals
 import libs.threadmanager
 
 def readLine(prompt = ">>>", f = sys.stdin):
@@ -10,7 +10,7 @@ def readLine(prompt = ">>>", f = sys.stdin):
 def signal_handler(signal, frame):
         print 'please press enter'
         libs.threadmanager.killall()
-        globalVars["running"] = False
+        libs.globals.global_vars["running"] = False
         #globalVars["server"].socket.close()
 
 signal.signal(signal.SIGINT, signal_handler)

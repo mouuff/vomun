@@ -20,7 +20,8 @@ aj00200:
  [I!] Put in an identity management system
  [I!] Work on the IRC UI
  [IM!] Develop a routing system, some discussion needed
-
+ [N] fix while globalVars["running"] == True and not self._stop.isSet():
+     - in libs/console.py
 vic20:
  [N!] Setup a git repo
 

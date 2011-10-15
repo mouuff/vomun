@@ -1,7 +1,7 @@
 import libs.events
 OUTPUT = True
 
-from libs.globals import globalVars
+import libs.globals
 
 
 class Logger(libs.events.Handler):
@@ -14,11 +14,11 @@ class Logger(libs.events.Handler):
         self._output('Got a connection')
 
     def info(self,message):
-        self._output("[info] %s" % message)
+        self._output('[info] %s' % message)
 
     def _output(self, message):
         if OUTPUT:
             print('[*] %s' % message)
 
-globalVars["logger"] = Logger()
-libs.events.register_handler(globalVars["logger"])
+libs.globals.global_vars['logger'] = Logger()
+libs.events.register_handler(libs.globals.global_vars['logger'])

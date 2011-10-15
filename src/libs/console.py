@@ -1,29 +1,28 @@
+'''Manage the current console interface. This will later be replaced with a
+stand alone console application.'''
+
 from code import InteractiveConsole
-import rlcompleter
+# import rlcompleter # unused import
 import readline
 readline.parse_and_bind("tab: complete")
-import threading
-from libs.globals import globalVars
+from libs.globals import global_vars
 import libs.threadmanager
 
-from libs.utils import readLine as readAFuckingLine
-import sys
 
 
 class console(libs.threadmanager.Thread):
     def __init__(self):
         libs.threadmanager.Thread.__init__(self)
-        self.console = InteractiveConsole(globalVars)
+        self.console = InteractiveConsole(global_vars)
 
     initscript = [
-    "from libs.globals import globalVars",
-    'other = globalVars["friends"]["0"]',
+    "from libs.globals import global_vars",
+    'other = global_vars["friends"]["0"]',
     "other.send('test')"
     ]
 
     def run(self):
-
-        while globalVars["running"] == True and not self._stop.isSet():
+        while global_vars['running'] == True and not self._stop.isSet():
             try:
                 line = raw_input(">>>")
                 if line == "runscript":
@@ -32,4 +31,4 @@ class console(libs.threadmanager.Thread):
                 else:
                     self.console.push(line)
             except KeyboardInterrupt:
-                globalVars["running"] = False
+                global_vars["running"] = False

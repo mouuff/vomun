@@ -1,6 +1,8 @@
 import gnupg
+import libs.globals
+
 try:
-    gpg = gnupg.GPG(gnupghome = '') # TODO: read path from config
+    gpg = gnupg.GPG(gnupghome = libs.globals.global_vars['gnupgdir'])
 except ValueError:
     print('[*] ERROR: GPG does not appear to be installed.')
 
