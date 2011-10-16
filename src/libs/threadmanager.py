@@ -21,10 +21,13 @@ def doJoins(timeout=None):
     for thread in joinlist:
         thread.join(timeout)
 
+    #thread with stop function
 def killall():
     for thread in threads:
         thread.stop()
-
+        
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
 class Thread(threading.Thread):
     def __init__(self):
         super(Thread, self).__init__()
