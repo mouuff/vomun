@@ -1,4 +1,4 @@
-#load config here
+'''Load the config from ~/.vomun/config.json'''
 
 import os
 import json
@@ -26,3 +26,5 @@ def load_config():
 
 def save_config():
     configfile.write(json.dumps(libs.globals.global_vars["config"],indent = 4))
+
+load_config()
