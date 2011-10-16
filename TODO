@@ -13,11 +13,18 @@ Unassigned:
      - Provide SHA-1's for messages
  [N] Expand the protocol for more robust messaging
      - Include dual-layer encryption on packets
-
+ [N] Clean up the code.
+     - Add whitespace
+     - More PEP8!!!!!
+     - Clean up the imports, they are hard to understand and somewhat redundant
+     - Add section comments where needed
+ [N] Write src/tests.py for unittesting
 aj00200:
  [IB] Work on basic connections
       Blocked by a working libs/friends.py file
  [I!] Put in an identity management system
+      - Finish reading crypto docs
+      - Test current code for security
  [I!] Work on the IRC UI
  [IM!] Develop a routing system, some discussion needed
  [N] fix while globalVars["running"] == True and not self._stop.isSet():
