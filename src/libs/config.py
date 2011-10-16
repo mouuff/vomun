@@ -12,5 +12,8 @@ def load_config():
         'gnupgdir': os.path.expanduser("~/.vomun/friends.json") # unused
     }
     
+def save_config():
+    '''Save the configuration file to ~/.vomun/config.*'''
+    pass
 
 load_config()

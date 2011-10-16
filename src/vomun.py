@@ -30,8 +30,8 @@ import tunnels.directudp
 tunnels.directudp.start()
 
 # Start the web interface
-import uis.web
-uis.web.start()
+import uis.web.manager
+uis.web.manager.start()
 
 
 ## main loop
