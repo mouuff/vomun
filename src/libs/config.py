@@ -22,7 +22,7 @@ def load_config():
         configfile.write(json.dumps(defaultConfig,indent = 4))
         configfile.flush()
 
-    libs.globals.globa_vars["config"] = json.loads(configfile.read())
+    libs.globals.global_vars["config"] = json.loads(configfile.read())
 
 def save_config():
     configfile.write(json.dumps(libs.globals.global_vars["config"],indent = 4))

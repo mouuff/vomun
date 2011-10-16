@@ -1,7 +1,7 @@
-'''global storage'''
+'''Global variable storage'''
 import os
 
-import libs.config
+# import libs.config # not being used yet
 
 global_vars = {
     'running': True,

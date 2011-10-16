@@ -18,13 +18,16 @@ def register(thread):
     else:
         raise UsageError('Must be a subclass of libs.threadmanager.Thread')
     
-def registerForJoin(thread):
+def register_for_join(thread):
     if isinstance(thread, Thread):
         joinlist.append(thread)
     else:
         raise UsageError('Must be a subclass of libs.threadmanager.Thread')
 
-def doJoins(timeout=None):
+def joinall(timeout=None):
+    '''Tell all thread objects to join. Wait for each one up to the `timeout`
+    parameter.
+    '''
     for thread in joinlist:
         thread.join(timeout)
 
