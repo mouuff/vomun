@@ -59,6 +59,7 @@ class Listener(libs.threadmanager.Thread):
                 friend.connection = self.sock
                 friend.data += data[0]
                 friend.parse_packets()
+                print('self is: %s' % str(self))
                 friend.connection = self.sock
             except socket.error, error:
                 if error.errno == 11: # No messages

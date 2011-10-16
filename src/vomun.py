@@ -13,30 +13,32 @@ import libs.threadmanager
 import libs.events
 import libs.logs
 import libs.config
-#startup
+
+## Startup
+# Create the console. Later to be replaced with an extenal app
 from libs.console import console
 consoleO = console()
 libs.threadmanager.register(consoleO)
 consoleO.start()
 
+# Load and prepare our list of friends
 import libs.friends as friends
 friends.load_friends()
 
+# Load connection handlers and start
 import tunnels.directudp
 tunnels.directudp.start()
 
-#from uis.web import WebUI
-#web = WebUI()
-#libs.threadmanager.register(web)
-#web.start()
+# Start the web interface
+import uis.web.manager
+uis.web.manager.start()
 
 
-#main loop
-
+## main loop
 while libs.globals.global_vars['running']:
     time.sleep(0.5)
 
-# cleanup
+## cleanup
 libs.threadmanager.killall()
 friends.save_friends()
 libs.config.save_config()

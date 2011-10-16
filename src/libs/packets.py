@@ -57,7 +57,7 @@ def make_packet(packet, *args, **kwargs):
     """
 
     if packet not in packets_by_name:
-        print "Couldn't find packet name %s!" % packet
+        print("Couldn't find packet name %s!" % packet)
         return ""
 
     header = packets_by_name[packet]
@@ -67,8 +67,8 @@ def make_packet(packet, *args, **kwargs):
     container = Container(**kwargs)
 
     if DUMP_ALL_PACKETS:
-        print "Making packet %s (%d)" % (packet, header)
-        print container
+        print("Making packet %s (%d)" % (packet, header))
+        print(container)
     payload = packets[header].build(container)
     return chr(header) + payload
 
@@ -89,7 +89,7 @@ def parse_packets(bytestream):
 
     if DUMP_ALL_PACKETS:
         for packet in l:
-            print "Parsed packet %d" % packet[0]
-            print packet[1]
+            print("Parsed packet %d" % packet[0])
+            print(packet[1])
 
     return l, leftovers

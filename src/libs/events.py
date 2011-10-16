@@ -28,3 +28,9 @@ class Handler(object):
         '''Called when we get or establish a connection'''
         pass
         
+    def web_ui_request(self, path, connection):
+        '''The user made a request to our localhost web address.
+        `path` is the file path requested by the user.
+        `connection` is what we will use to send data back'''
+        pass
+        
