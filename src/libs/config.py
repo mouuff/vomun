@@ -4,3 +4,6 @@ def load_config():
           should use the ConfigParser module.
     '''
     pass
+    
+
+load_config()

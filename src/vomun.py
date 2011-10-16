@@ -13,7 +13,8 @@ import libs.threadmanager
 import libs.events
 import libs.logs
 import libs.config
-#startup
+
+## startup
 from libs.console import console
 consoleO = console()
 libs.threadmanager.register(consoleO)
@@ -25,18 +26,12 @@ friends.load_friends()
 import tunnels.directudp
 tunnels.directudp.start()
 
-#from uis.web import WebUI
-#web = WebUI()
-#libs.threadmanager.register(web)
-#web.start()
 
-
-#main loop
-
+## main loop
 while libs.globals.global_vars['running']:
     time.sleep(0.5)
 
-# cleanup
+## cleanup
 libs.threadmanager.killall()
 friends.save_friends()
 libs.config.save_config()

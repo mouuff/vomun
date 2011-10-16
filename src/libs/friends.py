@@ -30,6 +30,7 @@ def load_friends():
             print ex, friend
 
 def save_friends():
+    '''Write ~/.vomun/friends.json'''
     friendlistw = open(friendlistpath,"w+")
     json = """[
 %s
@@ -39,9 +40,9 @@ def save_friends():
     friendlistw.write(json % friendsjson)
 
 def add_friend(keyid,ip, port = 1337, name = "unknown"):
-    '''Add a friend'''
-    friendo = Friend(keyid, ip, port, name)
-    global_vars["friends"][keyid] = friendo
+    '''Add a friend to our friends list'''
+    friend_obj = Friend(keyid, ip, port, name)
+    global_vars["friends"][keyid] = friend_obj
 
 def del_friend(keyid):
     '''Delete a friend'''
@@ -68,7 +69,7 @@ class Friend:
         self.data = ""
 
     def parse_packets(self):
-        print "parsing packets of %s" %self.name
+        print "parsing packets of %s" % self.name
         packets,leftovers =  parse_packets(self.data)
         self.data = leftovers
         print "leftovers:", leftovers
@@ -118,7 +119,7 @@ class Friend:
         self.wconnection.send(Message)
 
     def _json(self):
-        '''returns the json representation of a friend, used to save the friendlist'''
+        '''Returns the json representation of a friend, used to save the friendlist'''
         return """
     {
         "name": "%s",

@@ -2,7 +2,6 @@
 import os
 
 import libs.config
-libs.config.load_config()
 
 global_vars = {
     'running': True,
