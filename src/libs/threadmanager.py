@@ -4,6 +4,7 @@ needs to exist. Threads should stop when thread.stop() is called.
 import threading
 threads = []
 joinlist = []
+
 def register(thread):
     if isinstance(thread, Thread):
         threads.append(thread)

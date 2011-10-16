@@ -2,7 +2,8 @@
 
 import string,cgi,time
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-#import libs.events
+import libs.threadmanager
+import libs.events
 
 
 class MyHandler(BaseHTTPRequestHandler):
@@ -14,7 +15,7 @@ class MyHandler(BaseHTTPRequestHandler):
 ##            self.send_response(200)
 ##            self.send_header('Content-type',	'text/html')
 ##            self.end_headers()            
-            libs.events.broadcast(self.path, self)
+            libs.events.broadcast('web_ui_request', self.path, self)
 ##            if self.path == '/':
 ##                self.wfile.write('200, OK. The server is working')
 ##            elif self.path == '/settings.html':
@@ -41,25 +42,35 @@ class MyHandler(BaseHTTPRequestHandler):
         except :
             pass
 
-def main():
-    try:
-        server = HTTPServer(('', 7777), MyHandler)
-        print('Webserver running on port 7777 : Started')
-        server.serve_forever()
-    except KeyboardInterrupt:
-        print('^C received, shutting down server')
-        server.socket.close()
-
-
-
+class Server(libs.threadmanager.Thread):
+    def run(self):
+        try:
+            server = HTTPServer(('', 7777), MyHandler)
+            print('Webserver running on port 7777 : Started')
+            server.serve_forever()
+        except KeyboardInterrupt:
+            print('^C received, shutting down server')
+            server.socket.close()
+            
 class Handler(libs.events.Handler):
     def web_ui_request(self, path, connection):
-        self.send_response(200) # Woah, we shouldn't reply globally
-        self.send_header('Content-type',	'text/html')
-        self.end_headers()
+        connection.send_response(200) # Woah, we shouldn't reply globally
+        connection.send_header('Content-type',	'text/html')
+        connection.end_headers()
         if path == '/':
             connection.wfile.write('Default interface.')
         elif path == '/settings.html':
             connection.wfile.write('Connections page')
+            
+## Start the server and handler            
+def start():
+    '''Start the user interface. Create the Server object and the listener
+    we use to listen for events from this interface.
+    '''
+    server = Server()
+    handler = Handler()
 
-main()
+    libs.threadmanager.register(server)
+    server.start()
+
+    libs.events.register_handler(handler)

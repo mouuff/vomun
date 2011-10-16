@@ -14,17 +14,24 @@ import libs.events
 import libs.logs
 import libs.config
 
-## startup
+## Startup
+# Create the console. Later to be replaced with an extenal app
 from libs.console import console
 consoleO = console()
 libs.threadmanager.register(consoleO)
 consoleO.start()
 
+# Load and prepare our list of friends
 import libs.friends as friends
 friends.load_friends()
 
+# Load connection handlers and start
 import tunnels.directudp
 tunnels.directudp.start()
+
+# Start the web interface
+import uis.web
+uis.web.start()
 
 
 ## main loop
