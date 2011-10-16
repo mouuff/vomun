@@ -1,37 +1,24 @@
 #! /usr/bin/env python
 
 import string,cgi,time
-#from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+#import libs.events
 
 
 class MyHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            # html file lets display it
-            if self.path.endswith('.html'):
-                # TODO report connection with libs.events
-                #f = open(curdir + sep + self.path,"r") 
-                self.send_response(200)
-                self.send_header('Content-type',	'text/html')
-                self.end_headers()
-                self.wfile.write('200, OK. The server is working')
-                #f.close()
-                return
-            #if its a css file lets display it
-            #if self.path.endswith('.css'):
-            #    f = open(curdir + sep + self.path,"r") 
-            #    self.send_response(200)
-            #    self.send_header('Content-type',	'text/css')
-            #    self.end_headers()
-            #    self.wfile.write(f.read())
-            #    f.close()
-            #    return
-
-      
-                
-            return
+            # TODO: report connection with libs.events
+            #f = open(curdir + sep + self.path,"r") 
+##            self.send_response(200)
+##            self.send_header('Content-type',	'text/html')
+##            self.end_headers()            
+            libs.events.broadcast(self.path, self)
+##            if self.path == '/':
+##                self.wfile.write('200, OK. The server is working')
+##            elif self.path == '/settings.html':
+##                self.wfile.write('200, OK. Settings file')
                 
         except IOError:
             self.send_error(404, 'File Not Found: %s' % self.path)
@@ -63,5 +50,16 @@ def main():
         print('^C received, shutting down server')
         server.socket.close()
 
-if __name__ == '__main__':
-    main()
+
+
+class Handler(libs.events.Handler):
+    def web_ui_request(self, path, connection):
+        self.send_response(200) # Woah, we shouldn't reply globally
+        self.send_header('Content-type',	'text/html')
+        self.end_headers()
+        if path == '/':
+            connection.wfile.write('Default interface.')
+        elif path == '/settings.html':
+            connection.wfile.write('Connections page')
+
+main()
