@@ -19,6 +19,8 @@ Unassigned:
      - Clean up the imports, they are hard to understand and somewhat redundant
      - Add section comments where needed
  [N] Write src/tests.py for unittesting
+ [N] Design a signed release update system
+
 aj00200:
  [IB] Work on basic connections
       Blocked by a working libs/friends.py file
