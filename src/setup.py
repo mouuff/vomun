@@ -4,6 +4,15 @@ print('''
 == Project Vomun ==
 ''')
 import os
+import libs.errors
+
+# Import gnupg
+try:
+    import gnupg
+except ImportError:
+    raise libs.errors.DependancyError(
+                'Please install https://code.google.com/p/python-gnupg/')
+                                      
 
 # Create ~/.vomun/
 print('[*] Making ~/.vomun/')
