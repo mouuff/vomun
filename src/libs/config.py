@@ -8,11 +8,10 @@ config = {}
 
 configpath = os.path.expanduser("~/.vomun/config.json")
 
-configfile = None
 
-def load_config():
+def open_config():
     try:
-        configfile = open(configpath,"r")
+        configfile = open(configpath,"r+")
     except IOError:
         defaultConfig = {   
             'vomundir': os.getenv('HOME') + '/.vomun/',
@@ -21,8 +20,20 @@ def load_config():
         configfile = open(configpath,"a")
         configfile.write(json.dumps(defaultConfig,indent = 4))
         configfile.flush()
+        configfile.close()
+        configfile = open(configpath,"r+")
+    return configfile
 
-    libs.globals.globa_vars["config"] = json.loads(configfile.read())
+
+configfile = open_config()
+print configfile
+def load_config():
+
+    
+    import libs
+    dir (libs)
+    libs.globals.global_vars["config"] = json.loads(configfile.read())
+    configfile.seek(0) # return read/write position to beginning of the file
 
 def save_config():
     configfile.write(json.dumps(libs.globals.global_vars["config"],indent = 4))
