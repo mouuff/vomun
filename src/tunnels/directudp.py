@@ -23,6 +23,7 @@ class Connection(tunnels.base.Connection):
         
         self.beginHandshake()
         #self.send('{"type":"connect_request"}')
+        
     def beginHandshake(self):
         connectionRequest = libs.packets.packets[0]
         ip = "192.168.1.104"
@@ -40,7 +41,7 @@ class Listener(libs.threadmanager.Thread):
     '''Listen for UDP connections on our port'''
     def __init__(self, port = 1337):
         super(Listener, self).__init__()
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(('0.0.0.0', port)) # TODO: bind other addresses
         self.sock.setblocking(False)
         
@@ -59,10 +60,9 @@ class Listener(libs.threadmanager.Thread):
                 friend.connection = self.sock
                 friend.data += data[0]
                 friend.parse_packets()
-                print('self is: %s' % str(self))
                 friend.connection = self.sock
             except socket.error, error:
-                if error.errno == 11: # No messages
+                if error.errno == 11: # No new messages
                     time.sleep(1)       
         
         

@@ -28,12 +28,12 @@ def open_config():
 configfile = open_config()
 print configfile
 def load_config():
-
     
     import libs
     dir (libs)
     libs.globals.global_vars["config"] = json.loads(configfile.read())
     configfile.seek(0) # return read/write position to beginning of the file
+
 
 def save_config():
     configfile.write(json.dumps(libs.globals.global_vars["config"],indent = 4))

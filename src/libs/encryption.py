@@ -33,7 +33,7 @@ def sign_with(keyid, string):
     such as chat data.
     '''
     # TODO: make sure that this works
-    gpg.sign(string, keyid = keyid
+    gpg.sign(string, keyid = keyid)
     
 def decrypt(string):
     '''Decrypt `string`'''

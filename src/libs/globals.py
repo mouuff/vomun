@@ -1,6 +1,4 @@
-'''global storage'''
-import os
-
+'''Global variable storage'''
 
 global_vars = {
     'running': True,
