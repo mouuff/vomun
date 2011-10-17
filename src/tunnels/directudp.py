@@ -41,7 +41,7 @@ class Listener(libs.threadmanager.Thread):
     '''Listen for UDP connections on our port'''
     def __init__(self, port = 1337):
         super(Listener, self).__init__()
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(('0.0.0.0', port)) # TODO: bind other addresses
         self.sock.setblocking(False)
         
@@ -62,7 +62,7 @@ class Listener(libs.threadmanager.Thread):
                 friend.parse_packets()
                 friend.connection = self.sock
             except socket.error, error:
-                if error.errno == 11: # No messages
+                if error.errno == 11: # No new messages
                     time.sleep(1)       
         
         
