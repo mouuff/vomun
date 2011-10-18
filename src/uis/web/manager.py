@@ -38,15 +38,16 @@ class MyHandler(BaseHTTPRequestHandler):
 class Server(libs.threadmanager.Thread):
     '''Contains the webserver within a stopable and registered thread'''
     def run(self):
-        server = HTTPServer(('', 7777), MyHandler)
+        self.server = HTTPServer(('', 7777), MyHandler)
+        libs.threadmanager.register_socket(self.server.socket)
         print('Webserver running on port 7777 : Started')
         while not self._stop.isSet():
             try:
                 # server.serve_forever()
-                server.handle_request()
+                self.server.handle_request()
             except KeyboardInterrupt:
                 print('^C received, shutting down web server')
-                server.socket.close()
+                self.server.socket.close()
                 self._stop.set()
             
 class Handler(libs.events.Handler):

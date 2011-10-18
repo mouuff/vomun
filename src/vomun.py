@@ -18,11 +18,15 @@ import libs.config
 
 ## Startup
 if __name__ == '__main__':
+    # Create the API Server. Used by external Applications.
+    import api.server
+    api.server.start()
+    
     # Create the console. Later to be replaced with an extenal app
     from libs.console import console
     consoleO = console()
     libs.threadmanager.register(consoleO)
-    consoleO.start()
+    #consoleO.start()
     
     # Load and prepare our list of friends
     import libs.friends as friends
@@ -36,12 +40,16 @@ if __name__ == '__main__':
     import uis.web.manager
     uis.web.manager.start()
     
+    # Start the API
+
+
     ## main loop
     while libs.globals.global_vars['running']:
         time.sleep(0.5)
     
     ## cleanup
     libs.threadmanager.killall()
+    libs.threadmanager.close_sockets()
     friends.save_friends()
     libs.config.save_config()
     

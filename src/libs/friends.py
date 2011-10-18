@@ -7,6 +7,7 @@ import tunnels.directudp as directudp
 from tunnels.base import ConnectionError
 from libs.globals import global_vars
 from packets import parse_packets,packets_by_id,make_packet
+from api.functions import register_with_api
 
 global_vars["friends"] = {}
 friendlistpath = os.path.expanduser("~/.vomun/friends.json")
@@ -29,6 +30,7 @@ def load_friends():
         except Exception as ex: 
             print ex, friend
 
+@register_with_api
 def save_friends():
     '''Write ~/.vomun/friends.json'''
     friendlistw = open(friendlistpath,"w+")
@@ -39,11 +41,13 @@ def save_friends():
 
     friendlistw.write(json % friendsjson)
 
+@register_with_api
 def add_friend(keyid,ip, port = 1337, name = "unknown"):
     '''Add a friend to our friends list'''
     friend_obj = Friend(keyid, ip, port, name)
     global_vars["friends"][keyid] = friend_obj
 
+@register_with_api
 def del_friend(keyid):
     '''Delete a friend'''
     try:
@@ -51,10 +55,7 @@ def del_friend(keyid):
     except:
         global_vars["logger"].info("could not delete friend %s: Friend not found" % keyid)
 
-def getFriendWithIP(ip):
-    for friend in global_vars["friends"].values():
-        if friend.ip == ip:
-            return friend
+
         
 class Friend:
     def __init__(self, keyid, ip, port=1337, name = "unknown",):
@@ -128,6 +129,54 @@ class Friend:
         "port": %i    
     }""" % (self.name,self.keyid,self.ip,self.port)
 
+    def _rpc(self):
+        '''Returns the dict representation of the friend, used by the rpc server'''
+        return {
+            "name" : self.name,
+            "keyid": self.keyid,
+            "lastip" : self.ip,
+            "port" : self.port
+        }
     def __str__(self):
         return "<friend %s on %s:%i with id %s>" % (
                 self.name, self.ip, self.port, self.keyid)
+
+#api section
+
+@register_with_api
+def getFriendWithIP(ip):
+    for friend in global_vars["friends"].values():
+        if friend.ip == ip:
+            return friend
+
+@register_with_api
+def getFriendWithName(Name):
+    for friend in global_vars["friends"].values():
+        if friend.name == Name:
+            return friend
+
+@register_with_api
+def getFriendWithKey(keyid):
+    for friend in global_vars["friends"].values():
+        if friend.keyid == keyid:
+            return friend
+
+@register_with_api
+def friend_send(friendname, message):
+    return getFriendWithName(friendname).send(message)
+
+
+@register_with_api
+def friend_connect(friendname):
+    return getFriendWithName(friendname).connect()
+
+
+@register_with_api
+def friend_rename(friendname, newname):
+    return getFriendWithName(friendname).rename(newname)
+
+@register_with_api
+def friend_list():
+
+    friendslist = [friend._rpc() for friend in global_vars["friends"].values()]
+    return friendslist

@@ -2,28 +2,40 @@
 with api.packets when we get them.
 '''
 
-import socket
 import libs.threadmanager
+import libs.globals
+import xmlrpclib
+import api.functions
+from SimpleXMLRPCServer import SimpleXMLRPCServer
 
-class Server(libs.threadmanager.Thread):
-    '''Threaded server class'''
+class APIServer(libs.threadmanager.Thread):
+    calls = []
+    '''Contains the APIServer within a stopable and registered thread'''
     def __init__(self):
-        super(Server, self).__init__()
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind(('127.0.0.1', 3451))
-        self.sock.setblocking(False)
-        
+        libs.threadmanager.Thread.__init__(self)
+        self.server = SimpleXMLRPCServer(("localhost", 3451),allow_none = True)
+
+    def add_call(self,call):
+        self.server.register_function(call,call.__name__)
+        self.calls.append(call)
+
     def run(self):
-        if not self._stop.isSet():
+        print('API-server running on port 3451 : Started')
+        while not self._stop.isSet():
             try:
-                packet = self.sock.recvfrom(4096)
-                ip = packet[1][0]
-                data = packet[0]
-                
-                
-            except socket.error, error:
-                if error.errno == 11: # No new messages
-                    time.sleep(1)
-                else:
-                    raise error
+                # server.serve_forever()
+                self.server.handle_request()
+            except KeyboardInterrupt:
+                print('^C received, shutting down web server')
+                self.server.socket.close()
+                self._stop.set()
             
+## Start the server and handler            
+def start():
+    '''Start the user interface. Create the Server object and the listener
+    we use to listen for events from this interface.
+    '''
+    libs.globals.global_vars["apiserver"] = APIServer()
+    libs.threadmanager.register(libs.globals.global_vars["apiserver"])
+    libs.globals.global_vars["apiserver"].start()
+    api.functions.register()

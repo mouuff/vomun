@@ -3,6 +3,7 @@
 import os
 import json
 import libs.globals
+from api.functions import register_with_api
 
 config = {}
 
@@ -26,7 +27,8 @@ def open_config():
 
 
 configfile = open_config()
-print configfile
+
+@register_with_api
 def load_config():
     
     import libs
@@ -34,7 +36,12 @@ def load_config():
     libs.globals.global_vars["config"] = json.loads(configfile.read())
     configfile.seek(0) # return read/write position to beginning of the file
 
+@register_with_api
+def get_config():
+    """returns the config"""
+    return config
 
+@register_with_api
 def save_config():
     configfile.write(json.dumps(libs.globals.global_vars["config"],indent = 4))
 

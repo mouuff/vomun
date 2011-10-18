@@ -3,11 +3,11 @@ needs to exist. Threads should stop when thread.stop() is called.
 '''
 import threading
 from libs.errors import UsageError
-
+import socket
 # Lists of managed threads
 threads = []
 joinlist = []
-
+sockets = []
 def register(thread):
     '''Register a thread for tracking. Threads registered here will be told to
     stop() when the program is told to exit. Threads must be a subclass of
@@ -32,6 +32,18 @@ def joinall(timeout=None):
         thread.join(timeout)
 
     #thread with stop function
+
+def register_socket(sock):
+
+    if isinstance(sock,socket.socket):
+        sockets.append(sock)
+    else:
+        raise UsageError('Must be a subclass of socket')
+
+def close_sockets():
+    for sock in sockets:
+        sock.shutdown(socket.SHUT_RDWR)
+
 def killall():
     '''Tell all threads to stop'''
     for thread in threads:
