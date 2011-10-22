@@ -43,7 +43,13 @@ def register_socket(sock):
 def close_sockets():
     '''Shutdown all registered sockets'''
     for sock in sockets:
-        sock.shutdown(socket.SHUT_RDWR)
+        try:
+            sock.shutdown(socket.SHUT_RDWR)
+        except socket.error, error:
+            if error.errno == 107:
+                print('Killed socket which was not connected.')
+            else:
+                raise error
 
 def killall():
     '''Tell all threads to stop'''

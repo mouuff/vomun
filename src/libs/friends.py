@@ -57,7 +57,6 @@ def del_friend(keyid):
         global_vars["logger"].info("could not delete friend %s: Friend not found" % keyid)
 
 
-        
 class Friend:
     def __init__(self, keyid, ip, port=1337, name = "unknown",):
         '''Defines a friend, can be used to send a message'''
@@ -84,7 +83,8 @@ class Friend:
 
         else:
             reason = "Invalid packetId: %i" % packetId
-            disc = make_packet("Disconnect",reasonType="Custom",reason=reason,reasonlength=len(reason))
+            disc = make_packet("Disconnect",reasonType="Custom",
+                               reason=reason,reasonlength=len(reason))
             self.send(disc)
             return
         if packetId == "ConnectionRequest":
@@ -142,42 +142,48 @@ class Friend:
         return "<friend %s on %s:%i with id %s>" % (
                 self.name, self.ip, self.port, self.keyid)
 
-#api section
 
+## API section
 @register_with_api
-def getFriendWithIP(ip):
+def get_friend_by_ip(ip):
+    '''Search for a Friend object with the given ip and return it.'''
     for friend in global_vars["friends"].values():
         if friend.ip == ip:
             return friend
 
 @register_with_api
-def getFriendWithName(Name):
+def get_friend_by_name(Name):
+    '''Search for a Friend object with the given name and return it.'''
     for friend in global_vars["friends"].values():
         if friend.name == Name:
             return friend
 
 @register_with_api
-def getFriendWithKey(keyid):
+def get_friend_by_key(keyid):
+    '''Search for a Friend with the given key ID and return it.'''
     for friend in global_vars["friends"].values():
         if friend.keyid == keyid:
             return friend
 
 @register_with_api
 def friend_send(friendname, message):
-    return getFriendWithName(friendname).send(message)
+    '''Send a message to a friend.'''
+    return get_friend_by_name(friendname).send(message)
 
 
 @register_with_api
 def friend_connect(friendname):
-    return getFriendWithName(friendname).connect()
+    '''Connect to a friend with the given name.'''
+    return get_friend_by_name(friendname).connect()
 
 
 @register_with_api
 def friend_rename(friendname, newname):
-    return getFriendWithName(friendname).rename(newname)
+    '''Rename a friend.'''
+    return get_friend_by_name(friendname).rename(newname)
 
 @register_with_api
 def friend_list():
-
+    '''Return a list of friends.'''
     friendslist = [friend._rpc() for friend in global_vars["friends"].values()]
     return friendslist

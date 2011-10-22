@@ -8,9 +8,6 @@ from libs.packets import make_packet
 from libs.construct import *
 connections = {}
 
-class Tunnel(tunnels.base.Tunnel):
-    '''Make a direct UDP connection to a peer'''
-    pass
     
 class Connection(tunnels.base.Connection):
     '''UDP "connection" to a peer'''
@@ -28,7 +25,8 @@ class Connection(tunnels.base.Connection):
         connectionRequest = libs.packets.packets[0]
         ip = "192.168.1.104"
         key="5416435343454"
-        packet = make_packet("ConnectionRequest", encryptionmethod="aes",ip=ip, iplength = len(ip), key = key, keylength = len(key))
+        packet = make_packet("ConnectionRequest", encryptionmethod="aes",ip=ip,
+                           iplength = len(ip), key = key, keylength = len(key))
         self.send(packet)
         
         #handshake is ended in friends.handle_packets
@@ -56,7 +54,7 @@ class Listener(libs.threadmanager.Thread):
             try:
                 data = self.sock.recvfrom(4096)
                 ip = data[1][0]
-                friend = libs.friends.getFriendWithIP(ip)
+                friend = libs.friends.get_friend_by_ip(ip)
                 friend.connection = self.sock
                 friend.data += data[0]
                 friend.parse_packets()
