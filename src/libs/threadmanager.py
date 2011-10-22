@@ -34,13 +34,14 @@ def joinall(timeout=None):
     #thread with stop function
 
 def register_socket(sock):
-
-    if isinstance(sock,socket.socket):
+    '''Register a socket to be shutdown on program close'''
+    if isinstance(sock, socket.socket):
         sockets.append(sock)
     else:
         raise UsageError('Must be a subclass of socket')
 
 def close_sockets():
+    '''Shutdown all registered sockets'''
     for sock in sockets:
         sock.shutdown(socket.SHUT_RDWR)
 

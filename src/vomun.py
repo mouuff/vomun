@@ -10,6 +10,16 @@ print(libs.globals.global_vars['anon+']['banner'] %
         (libs.globals.global_vars['anon+']['VERSION'], 
         libs.globals.global_vars['anon+']['BUILD']))
 
+print('''
+    == Warning! ==
+This is a beta release
+of Anon+, which means
+that you should not
+trust it to share
+important info
+as it is not
+secure yet
+''')
 
 import libs.threadmanager
 import libs.events

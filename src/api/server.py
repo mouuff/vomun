@@ -9,8 +9,8 @@ import api.functions
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 class APIServer(libs.threadmanager.Thread):
-    calls = []
     '''Contains the APIServer within a stopable and registered thread'''
+    calls = []
     def __init__(self):
         libs.threadmanager.Thread.__init__(self)
         self.server = SimpleXMLRPCServer(("localhost", 3451),allow_none = True)
@@ -23,7 +23,6 @@ class APIServer(libs.threadmanager.Thread):
         print('API-server running on port 3451 : Started')
         while not self._stop.isSet():
             try:
-                # server.serve_forever()
                 self.server.handle_request()
             except KeyboardInterrupt:
                 print('^C received, shutting down web server')

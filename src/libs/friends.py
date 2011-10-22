@@ -6,6 +6,7 @@ import os.path
 import tunnels.directudp as directudp
 from tunnels.base import ConnectionError
 from libs.globals import global_vars
+import libs.encryption
 from packets import parse_packets,packets_by_id,make_packet
 from api.functions import register_with_api
 
