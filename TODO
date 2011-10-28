@@ -22,6 +22,10 @@ Unassigned:
  [N] Design a signed release update system
 
 aj00200:
+ [I!] Store GPG IDs and load with libs.friends
+ [I!] Encrypt to key IDs
+ [I!] Decrypt data
+
  [IB] Work on basic connections
       Blocked by a working libs/friends.py file
  [I!] Put in an identity management system
