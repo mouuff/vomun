@@ -30,6 +30,18 @@ globalcss = '''
 #header {
   border-bottom: 1px solid gray;
   letter-spacing: 3x;
+  text-align: center;
   color: gray;
 }
+'''
+
+friends_box = '''
+<h3>Friends</h3>
+{friends}
+'''
+
+key_form = '''
+<form action="keys.html" method="POST">
+  <input type="submit" value="Generate 2048-bit key" />
+</form>
 '''

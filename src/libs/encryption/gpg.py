@@ -23,24 +23,24 @@ class Encryption(libs.encryption.base.Encryption):
         self.source = source # Key to sign with
         self.dest = dest     # Key to encrypt to
         
-    def encrypt_to(keyid, string):
+    def encrypt_to(self, keyid, string):
         '''Encrypt a message with public key, `keyid`'''
         # TODO: Eventually we want to switch armor to False (binary data)
-        gpg.encrypt(string, recipients = keyid) # TODO: find the right way
+        gpg.encrypt(string, recipients = keyid)
 
-    def sign(string):
+    def sign(self, string):
         '''Sign string with `keyid`. This will not be used in P2P, but may be
         used for other messages.
         '''
         # TODO: make sure that this works
         gpg.sign(string, keyid = self.source)
 
-    def decrypt(string):
+    def decrypt(self, string):
         '''Decrypt `string`'''
         # TODO: make sure this actually works!
         return gpg.decrypt(string)
         
-    def verify(string):
+    def verify(self, string):
         '''Verify the signature on `string` and return the signing key ID'''
         # TODO: make sure this actually works!
         return gpg.verify(string)

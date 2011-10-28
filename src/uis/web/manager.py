@@ -1,4 +1,5 @@
-import string,cgi,time
+import string
+import time
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import libs.threadmanager
 import libs.globals
@@ -63,7 +64,7 @@ class Handler(libs.events.Handler):
                     title = 'Project Vomun',
                     pagetitle = 'Anon+',
                     main = 'Welcome to Anon+',
-                    sidecontent = '<h3>Friends</h3>No friends? Get a life!'
+                    sidecontent = self.__friends2html()
             ))
         elif path == '/global.css':
             connection.send_response(200)
@@ -88,6 +89,23 @@ class Handler(libs.events.Handler):
             ))
             libs.globals.global_vars['running'] = False
             libs.threadmanager.killall()
+        elif path == '/keys.html':
+            connection.send_response(200)
+            connection.send_header('Content-type', 'text/html')
+            connection.end_headers()
+            connection.wfile.write(uis.web.content.template.format(
+                    title = 'Key management',
+                    pagetitle = 'Key management',
+                    main = uis.web.content.key_form,
+                    sidecontent = self.__friends2html()
+            ))
+            
+    def __friends2html(self):
+        '''Convert our friends list into some nice HTML'''
+        return uis.web.content.friends_box.format(
+                friends = 'None? Get a life'
+        )
+        
             
 ## Start the server and handler            
 def start():
