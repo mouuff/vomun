@@ -6,7 +6,7 @@ import os.path
 import tunnels.directudp as directudp
 from tunnels.base import ConnectionError
 from libs.globals import global_vars
-import libs.encryption
+import libs.encryption.gpg
 from packets import parse_packets,packets_by_id,make_packet
 from api.functions import register_with_api
 
@@ -68,6 +68,8 @@ class Friend:
         self.rconnection = None
         self.wconnection = None
         self.data = ""
+        
+        self.encryption = libs.encryption.gpg.Encryption(source, self.keyid)
 
     def parse_packets(self):
         print "parsing packets of %s" % self.name
@@ -85,13 +87,13 @@ class Friend:
             reason = "Invalid packetId: %i" % packetId
             disc = make_packet("Disconnect",reasonType="Custom",
                                reason=reason,reasonlength=len(reason))
-            self.send(disc)
+            self.send(self.encryption.encrypt(disc))
             return
         if packetId == "ConnectionRequest":
             print "sending acceptConnection"
             #self.connected = True
             accept_connection = make_packet("AcceptConnection",int=1)
-            self.send(accept_connection,1)
+            self.send(self.encryption.encrypt(accept_connection,1))
             print "acceptConnection sent"
 
         elif packetId == "AcceptConnection":
