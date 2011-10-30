@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 '''Start the program. Load segments of the program that need to be started and
 run them.'''
-import sys
 import time
 
 import libs.globals
@@ -9,6 +8,11 @@ import libs.globals
 print(libs.globals.global_vars['anon+']['banner'] % 
         (libs.globals.global_vars['anon+']['VERSION'], 
         libs.globals.global_vars['anon+']['BUILD']))
+        
+import libs.threadmanager
+import libs.events
+import libs.logs
+import libs.config
 
 print('''
     == Warning! ==
@@ -20,11 +24,6 @@ important info
 as it is not
 secure yet
 ''')
-
-import libs.threadmanager
-import libs.events
-import libs.logs
-import libs.config
 
 ## Startup
 if __name__ == '__main__':

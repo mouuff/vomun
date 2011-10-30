@@ -49,7 +49,6 @@ class Listener(libs.threadmanager.Thread):
         self._stop.set()
         
     def run(self):
-        leftover = ""
         while not self._stop.isSet():
             try:
                 data = self.sock.recvfrom(4096)
