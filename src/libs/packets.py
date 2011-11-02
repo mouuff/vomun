@@ -26,7 +26,16 @@ packets = {
         ),
     2:  Struct("AcceptConnection",
             UBInt8("int")
-        )
+        ),
+
+    3:  Struct("Message"),
+            UBInt32("to_node_length"),
+            MetaField("to_node", lambda ctx: ctx["to_node_length"]),
+            UBInt32("timestamp"),
+            UBInt32("message_length"),
+            MetaField("message", lambda ctx: ctx["message_length"])
+        )    
+        
 }
 
 
