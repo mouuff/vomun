@@ -25,13 +25,14 @@ class Connection(tunnels.base.Connection):
         connectionRequest = libs.packets.packets[0]
         ip = "192.168.1.104"
         key="5416435343454"
-        packet = make_packet("ConnectionRequest", encryptionmethod="aes",ip=ip,
+        # encryptionmethod = "aes"
+        packet = make_packet("ConnectionRequest", encryptionmethod="rsa",ip=ip,
                            iplength = len(ip), key = key, keylength = len(key))
         self.send(packet)
         
         #handshake is ended in friends.handle_packets
-    def send(self, Message):
-        self.sock.send(Message)
+    def send(self, message):
+        self.sock.send(message)
 
     
     
@@ -55,7 +56,7 @@ class Listener(libs.threadmanager.Thread):
                 ip = data[1][0]
                 friend = libs.friends.get_friend_by_ip(ip)
                 friend.connection = self.sock
-                friend.data += data[0]
+                friend.data += data[0] # Send data to the Friend object
                 friend.parse_packets()
                 friend.connection = self.sock
             except socket.error, error:

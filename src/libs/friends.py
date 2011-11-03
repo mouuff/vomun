@@ -75,6 +75,7 @@ class Friend:
 
     def parse_packets(self):
         print('parsing packets of %s' % self.name)
+        self.__decrypt()
         packets, leftovers =  parse_packets(self.data)
         self.data = leftovers
         print('leftovers:', leftovers)
@@ -144,6 +145,10 @@ class Friend:
             'lastip' : self.ip,
             'port' : self.port
         }
+        
+    def __decrypt(self):
+        self.data = self.encryption.decrypt(self.data)
+        
     def __str__(self):
         return '<friend %s on %s:%i with id %s>' % (
                 self.name, self.ip, self.port, self.keyid)
