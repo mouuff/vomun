@@ -30,7 +30,7 @@ class MyHandler(BaseHTTPRequestHandler):
             self.end_headers()
             upfilecontent = query.get('upfile')
             print('filecontent', upfilecontent[0])
-            self.wfile.write('<HTML>POST OK.<BR><BR>');
+            self.wfile.write('<html>POST OK.<br /><br />');
             self.wfile.write(upfilecontent[0]);
             
         except:
@@ -61,9 +61,9 @@ class Handler(libs.events.Handler):
             connection.send_header('Content-type',	'text/html')
             connection.end_headers()
             connection.wfile.write(uis.web.content.template.format(
-                    title = 'Project Vomun',
-                    pagetitle = 'Anon+',
-                    main = 'Welcome to Anon+',
+                    title = 'Anon+ News Feed',
+                    pagetitle = 'Anon+ News Feed',
+                    main = uis.web.content.post_box + self.__generate_news_feed(),
                     sidecontent = self.__friends2html()
             ))
         elif path == '/global.css':
@@ -103,9 +103,23 @@ class Handler(libs.events.Handler):
     def __friends2html(self):
         '''Convert our friends list into some nice HTML'''
         return uis.web.content.friends_box.format(
-                friends = 'None? Get a life'
+                friends = 'Our friend detector tells me you have no friends!'
         )
         
+    def __generate_news_feed(self):
+        '''Return the post elements in HTML'''
+        content = ''
+        content += uis.web.content.post.format(
+                user = 'aj00200',
+                body = 'Yeah, we are almost ready!',
+                hash = 'lskjdf'
+        )
+        content += uis.web.content.mention.format(
+                user = 'Anonymous1234',
+                body = '<a class="tag" href="#!/u/aj00200">@aj00200</a> Ready for the Nov 5th beta?',
+                hash = 'lzu89k'
+        )
+        return content
             
 ## Start the server and handler            
 def start():
