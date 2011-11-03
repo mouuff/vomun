@@ -71,7 +71,8 @@ class Friend:
         self.wconnection = None
         self.data = ''
         
-        self.encryption = libs.encryption.gpg.Encryption(source, self.keyid)
+        self.encryption = libs.encryption.gpg.Encryption(
+                libs.globals.global_vars['config']['nodekey'], self.keyid)
 
     def parse_packets(self):
         print('parsing packets of %s' % self.name)
