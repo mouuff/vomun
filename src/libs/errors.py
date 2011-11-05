@@ -1,3 +1,4 @@
+'''Custom errors which are used in Anon+.'''
 class AnonError(Exception):
     pass
 
@@ -18,3 +19,11 @@ class UsageError(AnonError):
     '''You are not properly using the internal code structure or API.
     Check that you are subclassing where possible.'''
     pass
+
+
+# Other errors
+class InstallError(AnonError):
+    '''Fatal error during install. Probably caused by bad file permissions or
+    using an operating system like Windows.'''
+    pass
+    

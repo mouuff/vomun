@@ -46,10 +46,10 @@ class Encryption(libs.encryption.base.Encryption):
         return gpg.verify(string)
 
 def generate_key(key_length = 2048, key_type = 'RSA', name = 'Anonymous'):
-    '''Generate a key and return the key ID'''
+    '''Generate a key and return the key fingerprint'''
     # TODO: use the name parameter
     print('Generating a key. This could take a while.')
     key_data = gpg.gen_key_input(key_type = key_type, key_length = key_length)
     key = gpg.gen_key(key_data)
 
-    return '0x00000000'
+    return key.fingerprint

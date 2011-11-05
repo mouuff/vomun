@@ -15,6 +15,7 @@ def open_config():
         defaultConfig = {   
             'vomundir': os.getenv('HOME') + '/.vomun/',
             'gnupgdir': os.getenv('HOME') + '/.vomun/gnupg/',
+            'nodekey': ''
         }
         configfile = open(configpath,"a")
         configfile.write(json.dumps(defaultConfig,indent = 4))
@@ -28,19 +29,20 @@ configfile = open_config()
 
 @register_with_api
 def load_config():
-    
+    '''Load the configuration file'''
     import libs
-    dir (libs)
-    libs.globals.global_vars["config"] = json.loads(configfile.read())
+    libs.globals.global_vars['config'] = json.loads(configfile.read())
     configfile.seek(0) # return read/write position to beginning of the file
 
 @register_with_api
 def get_config():
-    """returns the config"""
-    libs.globals.global_vars["config"]
+    '''Return the contents of the configuration file'''
+    return libs.globals.global_vars["config"]
+
 
 @register_with_api
 def save_config():
+    '''Write the configuration file to the hard disk'''
     configfile.write(json.dumps(libs.globals.global_vars["config"],indent = 4))
 
 load_config()
