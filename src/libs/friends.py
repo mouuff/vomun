@@ -3,6 +3,7 @@ it into a list of Friend objects.
 '''
 import json
 import os.path
+import time
 
 import tunnels.directudp as directudp
 from libs.globals import global_vars
