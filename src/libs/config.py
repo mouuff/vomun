@@ -5,8 +5,6 @@ import json
 import libs.globals
 from api.functions import register_with_api
 
-config = {}
-
 configpath = os.path.expanduser("~/.vomun/config.json")
 
 
@@ -39,7 +37,8 @@ def load_config():
 @register_with_api
 def get_config():
     '''Return the contents of the configuration file'''
-    return config
+    return libs.globals.global_vars["config"]
+
 
 @register_with_api
 def save_config():
