@@ -32,6 +32,7 @@ class Connection(tunnels.base.Connection):
         
         #handshake is ended in friends.handle_packets
     def send(self, message):
+        print('Sending: ' + message)
         self.sock.send(message)
 
     
@@ -57,6 +58,7 @@ class Listener(libs.threadmanager.Thread):
                 friend = libs.friends.get_friend_by_ip(ip)
                 friend.connection = self.sock
                 friend.data += data[0] # Send data to the Friend object
+                print('recv: ' + data[0])
                 friend.parse_packets()
                 friend.connection = self.sock
             except socket.error, error:
