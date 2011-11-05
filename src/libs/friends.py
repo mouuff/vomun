@@ -117,8 +117,8 @@ class Friend:
         self.wconnection = directudp.Connection(self)
         #self.connected = True
 
-    def send(self, message, system=0):
-        '''Send a message to the friend. Will try to establish a connection, if not yet connected'''
+    def send(self, data, system=0):
+        '''Send data to the friend. Will try to establish a connection, if not yet connected'''
         if self.wconnection == None:
             self.connect()
             #if not self.connected:
@@ -126,8 +126,20 @@ class Friend:
         if not self.connected and not system:
             print 'not connected: Message discarded. Message was: %s' % message
             return
-        self.wconnection.send(self.encryption.encrypt(message))
+        self.wconnection.send(self.encryption.encrypt(data))
 
+    def send_message(self,message):
+        '''Sends a Text message to a friend'''
+        keyid = self.keyid
+        keyidlength = len(keyid)
+        tstamp = time.time()
+        messagelength = len(message)
+
+        pack = make_packet("Message",to_node_length = keyidlength, to_node = keyid,
+                            timestamp = tstamp, message_length = messagelength,
+                            message = message)
+
+        self.send(pack)
     def _json(self):
         '''Returns the json representation of a friend, used to save the friendlist'''
         return '''
