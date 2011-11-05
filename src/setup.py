@@ -15,7 +15,7 @@ except ImportError:
 ## Prepare for setup
 # Find local variables
 print('[*] Preparing for setup...')
-HOME = os.getenv('HOME')
+HOME = os.path.expanduser('~')
 VOMUN_PATH = os.path.join(HOME, '.vomun')
 KEYS_PATH = os.path.join(VOMUN_PATH, 'keys')
 CONFIG_PATH = os.path.join(VOMUN_PATH, 'config.json')
@@ -93,7 +93,7 @@ config = template.format(keysdir = KEYS_PATH,
                          vomundir = VOMUN_PATH,
                          nodekey = fingerprint,
                          userkey = idfingerprint,
-                         username = USER_name
+                         username = USER_NAME
                         )
 
 try:
@@ -111,6 +111,6 @@ print(' == Setup Complete ==')
 print('''
  == Anon+ Setup is Complete ==
 Please run vomun.py and then go to
-http://localhost:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++7777/ to use it.
+http://localhost:7777/ to use it.
 ''')
 
