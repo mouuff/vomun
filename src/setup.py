@@ -89,8 +89,7 @@ print('[*] Generating the config file...')
 #     "username": "{username}"
 # }
 # '''
-template = '''
-{
+template = '''{
     "gnupgdir": "%s",
     "vomundir": "%s",
     "nodekey": "%s",
