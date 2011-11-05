@@ -80,21 +80,30 @@ print('      ' + idfingerprint)
 ## Configuration
 # Generate the contents
 print('[*] Generating the config file...')
-template = '''                                                                                                                                                       
+# template = '''
+# {
+#     "gnupgdir": "{keysdir}",
+#     "vomundir": "{vomundir}",
+#     "nodekey": "{nodekey}",
+#     "userkey": "{userkey}",
+#     "username": "{username}"
+# }
+# '''
+template = '''
 {
-    "gnupgdir": "{keysdir}",
-    "vomundir": "{vomundir}",
-    "nodekey": "{nodekey}",
-    "userkey": "{userkey}",
-    "username": "{username}"
-}
-'''
-config = template.format(keysdir = KEYS_PATH,
-                         vomundir = VOMUN_PATH,
-                         nodekey = fingerprint,
-                         userkey = idfingerprint,
-                         username = USER_NAME
-                        )
+    "gnupgdir": "%s",
+    "vomundir": "%s",
+    "nodekey": "%s",
+    "userkey": "%s",
+    "username": "%s"
+}'''
+
+config = template % (KEYS_PATH,
+                     VOMUN_PATH,
+                     fingerprint,
+                     idfingerprint,
+                     USER_NAME
+                    )
 
 try:
     print(' [*] Writing the config file.')
